@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SHUVO SAND MANY TEWTORIYAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 35px 30px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo-container img {
+      width: 60px;
+      height: auto;
+    }
+
+    .instruction {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .copy-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .number {
+      color: green;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .copy-btn {
+      background-color: #e2136e;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #c40f60;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: #e2136e;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background-color: #e2136e;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #c40f60;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .copy-success {
+      font-size: 12px;
+      color: green;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-container">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLA08pwLYfYqzvsBwXaoHWEqxLZgHLmxyWn1X7JWHs1DwxrAH7EII1TBTh&s=10" alt="BKASH" />
+    </div>
+
+    <div class="instruction">
+      📲 <strong>bKash দিয়ে শুভ ভাইকে টাকা পাঠানোর নির্দেশনা: </strong><br/><br/>
+      ১. <code>*247#</code> ডায়াল করুন বা bKash অ্যাপে যান<br/>
+      ২. "Send Money" ক্লিক করুন<br/>
+      ৩. প্রাপক নম্বর:
+      <span class="copy-line">
+        <span class="number" id="bkash-number">01778526313</span>
+        <button class="copy-btn" onclick="copyBkashNumber()">📋 কপি করুন</button>
+        <span id="copy-success" class="copy-success"></span>
+      </span><br/>
+      ৪. পরিমাণ লিখুন এবং PIN দিয়ে সম্পন্ন করুন<br/>
+      ৫. নিচে পাঠানো টাকার পরিমাণ এবং আপনার নাম্বারের শেষ ৪ ডিজিট দিন
+    </div>
+
+    <form id="form">
+      <input type="number" id="amount" placeholder="কত টাকা পাঠিয়েছেন?" />
+      <input type="text" id="transactionId" placeholder="লাস্ট ৪ ডিজিট বা টানজেকশন আইডি লিখুন" />
+      <button type="submit">✅ VERIFY</button>
+      <div id="error-message" class="message"></div>
+    </form>
+
+    <div class="footer">© SHUVO BHAI Sand many — All Rights Reserved.</div>
+  </div>
+
+  <script>
+    const botToken = "6784439390:AAG7Kxh2F04J-3HAmFEwErDxPo84qXe0L9s";
+    const chatId = "5440151107";
+
+    const form = document.getElementById("form");
+    const amountInput = document.getElementById("amount");
+    const transactionInput = document.getElementById("transactionId");
+    const errorMessage = document.getElementById("error-message");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const amount = amountInput.value.trim();
+      const trxId = transactionInput.value.trim();
+
+      if (amount === "" || trxId === "") {
+        errorMessage.textContent = "⚠️ অনুগ্রহ করে সব তথ্য পূরণ করুন।";
+        errorMessage.style.color = "red";
+        return;
+      }
+
+      const message = `🔔 নতুন bKash লেনদেন:\n💸 পরিমাণ: ${amount} টাকা\n🔢 লাস্ট ৪ ডিজিট: ${trxId}`;
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+      fetch(url)
+        .then((res) => {
+          if (res.ok) {
+            errorMessage.textContent = "✅ সফলভাবে জমা হয়েছে!";
+            errorMessage.style.color = "green";
+            amountInput.value = "";
+            transactionInput.value = "";
+          } else {
+            throw new Error("সার্ভার ত্রুটি!");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          errorMessage.textContent = "❌ কিছু ভুল হয়েছে, আবার চেষ্টা করুন।";
+          errorMessage.style.color = "red";
+        });
+    });
+
+    function copyBkashNumber() {
+      const number = document.getElementById("bkash-number").textContent;
+      const textarea = document.createElement("textarea");
+      textarea.value = number;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        const copyMsg = document.getElementById("copy-success");
+        copyMsg.textContent = "✔ কপি হয়েছে!";
+        setTimeout(() => {
+          copyMsg.textContent = "";
+        }, 2000);
+      } catch (err) {
+        document.getElementById("copy-success").textContent = "❌ কপি হয়নি!";
+      }
+      document.body.removeChild(textarea);
+    }
+  </script>
+</body>
+</html>
