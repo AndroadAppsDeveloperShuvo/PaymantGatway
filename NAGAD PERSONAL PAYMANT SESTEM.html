@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NAGAD PAYMANT SESTEM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Bengali', sans-serif;
+      background: linear-gradient(to bottom right, #fbd39a, #f64b3c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px 25px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 80px;
+    }
+
+    .instruction {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .receiver-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0 15px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #e53935;
+      flex-wrap: wrap;
+    }
+
+    .receiver-line span {
+      color: #e53935;
+      font-weight: bold;
+    }
+
+    .copy-btn-inline {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .copy-btn-inline:hover {
+      background-color: #c62828;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #f44336;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background-color: #f44336;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #c62828;
+    }
+
+    .message {
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .copy-success {
+      font-size: 12px;
+      color: green;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-container">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuD9LcQURulM_tu_32Q2DusdlWQCvLHzk1Xw&s" alt="Nagad Logo">
+    </div>
+
+    <div class="instruction">
+      📲 <strong>Nagad এর মাধ্যমে শুভ ভাইকে টাকা পাঠানোর সিস্টেম:</strong><br/><br/>
+      ১. Nagad অ্যাপ খুলুন অথবা *167# ডায়াল করুন<br/>
+      ২. "Send Money" সিলেক্ট করুন<br/>
+      <div class="receiver-line">
+        ৩. প্রাপক নম্বর: <span id="nagad-number">01778526313</span>
+        <button class="copy-btn-inline" onclick="copyNagadNumber()">📋 কপি</button>
+        <span id="copy-success" class="copy-success"></span>
+      </div>
+      ৪. পরিমাণ দিন এবং PIN দিয়ে সম্পন্ন করুন<br/>
+      ৫. নিচে পাঠানো টাকা এবং আপনার নাম্বারের শেষ ৪ ডিজিট লিখুন
+    </div>
+
+    <form id="form">
+      <input type="number" id="amount" placeholder="📥 কত টাকা পাঠিয়েছেন?" />
+      <input type="text" id="transactionId" placeholder="🔢 শেষ ৪ ডিজিট বা Trx ID" />
+      <button type="submit">✅ জমা দিন</button>
+      <div id="error-message" class="message"></div>
+    </form>
+
+    <div class="footer">© SHUVO BHAI — SAND MANY SESTEM</div>
+  </div>
+
+  <script>
+    const botToken = "6784439390:AAG7Kxh2F04J-3HAmFEwErDxPo84qXe0L9s";
+    const chatId = "5440151107";
+
+    const form = document.getElementById("form");
+    const amountInput = document.getElementById("amount");
+    const transactionInput = document.getElementById("transactionId");
+    const errorMessage = document.getElementById("error-message");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const amount = amountInput.value.trim();
+      const trxId = transactionInput.value.trim();
+
+      if (amount === "" || trxId === "") {
+        errorMessage.textContent = "⚠️ অনুগ্রহ করে সকল তথ্য দিন।";
+        errorMessage.style.color = "red";
+        return;
+      }
+
+      const message = `🔔 নতুন Nagad লেনদেন:\n💰 পরিমাণ: ${amount} টাকা\n📌 লাস্ট ৪ ডিজিট বা ID: ${trxId}`;
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+      fetch(url)
+        .then((res) => {
+          if (res.ok) {
+            errorMessage.textContent = "✅ তথ্য সফলভাবে পাঠানো হয়েছে!";
+            errorMessage.style.color = "green";
+            amountInput.value = "";
+            transactionInput.value = "";
+          } else {
+            throw new Error("সার্ভার সমস্যা");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          errorMessage.textContent = "❌ কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+          errorMessage.style.color = "red";
+        });
+    });
+
+    function copyNagadNumber() {
+      const number = document.getElementById("nagad-number").textContent;
+      const textarea = document.createElement("textarea");
+      textarea.value = number;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        const copyMsg = document.getElementById("copy-success");
+        copyMsg.textContent = "✔ কপি হয়েছে!";
+        setTimeout(() => {
+          copyMsg.textContent = "";
+        }, 2000);
+      } catch (err) {
+        document.getElementById("copy-success").textContent = "❌ কপি হয়নি!";
+      }
+      document.body.removeChild(textarea);
+    }
+  </script>
+</body>
+</html>
