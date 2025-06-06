@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NAGAD PAYMANT SESTEM</title>
+  <title>NAGAD PAYMENT SYSTEM</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
@@ -79,12 +75,9 @@
       white-space: nowrap;
     }
 
-    .copy-btn-inline:hover {
-      background-color: #c62828;
-    }
-
     input[type="number"],
-    input[type="text"] {
+    input[type="text"],
+    input[type="file"] {
       width: 100%;
       padding: 12px;
       margin-top: 12px;
@@ -110,10 +103,6 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #c62828;
     }
 
     .message {
@@ -150,17 +139,18 @@
         <span id="copy-success" class="copy-success"></span>
       </div>
       ৪. পরিমাণ দিন এবং PIN দিয়ে সম্পন্ন করুন<br/>
-      ৫. নিচে পাঠানো টাকা এবং আপনার নাম্বারের শেষ ৪ ডিজিট লিখুন
+      ৫. নিচে পাঠানো টাকা, Trx ID এবং স্ক্রিনশট দিন
     </div>
 
     <form id="form">
-      <input type="number" id="amount" placeholder="📥 কত টাকা পাঠিয়েছেন?" />
-      <input type="text" id="transactionId" placeholder="🔢 শেষ ৪ ডিজিট বা Trx ID" />
+      <input type="number" id="amount" placeholder="📥 কত টাকা পাঠিয়েছেন?" required />
+      <input type="text" id="transactionId" placeholder="🔢 Trx ID বা শেষ ৪ ডিজিট" required />
+      <input type="file" id="screenshot" accept="image/*" required />
       <button type="submit">✅ জমা দিন</button>
       <div id="error-message" class="message"></div>
     </form>
 
-    <div class="footer">© SHUVO BHAI — SAND MANY SESTEM</div>
+    <div class="footer">© SHUVO BHAI — SEND MONEY SYSTEM</div>
   </div>
 
   <script>
@@ -170,38 +160,53 @@
     const form = document.getElementById("form");
     const amountInput = document.getElementById("amount");
     const transactionInput = document.getElementById("transactionId");
+    const screenshotInput = document.getElementById("screenshot");
     const errorMessage = document.getElementById("error-message");
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+
       const amount = amountInput.value.trim();
       const trxId = transactionInput.value.trim();
+      const screenshotFile = screenshotInput.files[0];
 
-      if (amount === "" || trxId === "") {
+      if (!amount || !trxId || !screenshotFile) {
         errorMessage.textContent = "⚠️ অনুগ্রহ করে সকল তথ্য দিন।";
         errorMessage.style.color = "red";
         return;
       }
 
-      const message = `🔔 নতুন Nagad লেনদেন:\n💰 পরিমাণ: ${amount} টাকা\n📌 লাস্ট ৪ ডিজিট বা ID: ${trxId}`;
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+      // 1st Step: send text message
+      const textMessage = `🔔 নতুন Nagad লেনদেন:\n💰 পরিমাণ: ${amount} টাকা\n📌 Trx ID/শেষ ৪ ডিজিট: ${trxId}`;
 
-      fetch(url)
-        .then((res) => {
-          if (res.ok) {
-            errorMessage.textContent = "✅ তথ্য সফলভাবে পাঠানো হয়েছে!";
-            errorMessage.style.color = "green";
-            amountInput.value = "";
-            transactionInput.value = "";
-          } else {
-            throw new Error("সার্ভার সমস্যা");
-          }
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: textMessage
         })
-        .catch((err) => {
-          console.error(err);
-          errorMessage.textContent = "❌ কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।";
-          errorMessage.style.color = "red";
+      }).then(() => {
+        // 2nd Step: send screenshot photo
+        const formData = new FormData();
+        formData.append("chat_id", chatId);
+        formData.append("photo", screenshotFile);
+
+        return fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
+          body: formData
         });
+      }).then(() => {
+        errorMessage.textContent = "✅ তথ্য ও ছবি সফলভাবে পাঠানো হয়েছে!";
+        errorMessage.style.color = "green";
+        form.reset();
+      }).catch((err) => {
+        console.error(err);
+        errorMessage.textContent = "❌ কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+        errorMessage.style.color = "red";
+      });
     });
 
     function copyNagadNumber() {
