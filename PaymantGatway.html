@@ -16,15 +16,21 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .card {
       background: #fff;
       border-radius: 20px;
-      padding: 35px 30px;
+      padding: 40px 35px;
       width: 90%;
-      max-width: 420px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
       animation: fadeIn 0.5s ease-in-out;
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -32,116 +38,217 @@
     }
     .logo-container {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
     .logo-container img {
-      width: 60px;
+      width: 70px;
       height: auto;
+      filter: drop-shadow(0 0 3px rgba(226, 19, 110, 0.7));
+      transition: transform 0.3s ease;
+    }
+    .logo-container img:hover {
+      transform: scale(1.1);
     }
     .instruction {
-      font-size: 15px;
-      color: #333;
-      line-height: 1.7;
-      margin-bottom: 25px;
+      font-size: 16px;
+      color: #2c2c2c;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    .instruction strong {
+      color: #e2136e;
     }
     .copy-line {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-top: 8px;
     }
     .number {
-      color: green;
-      font-weight: bold;
-      font-size: 16px;
+      color: #28a745;
+      font-weight: 700;
+      font-size: 18px;
+      font-family: monospace;
+      user-select: text;
+      padding: 4px 8px;
+      background: #e6f4ea;
+      border-radius: 8px;
+      box-shadow: inset 0 0 6px rgba(40, 167, 69, 0.2);
+      transition: background 0.3s ease;
+    }
+    .number:hover {
+      background: #d0e9d5;
+      cursor: text;
     }
     .copy-btn {
       background-color: #e2136e;
       color: white;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.25s ease, transform 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 8px rgba(226, 19, 110, 0.4);
+      user-select: none;
     }
     .copy-btn:hover {
       background-color: #c40f60;
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(196, 15, 96, 0.6);
+    }
+    .copy-btn:active {
+      transform: scale(0.95);
     }
     input[type="text"], input[type="number"], input[type="file"] {
       width: 100%;
-      padding: 12px 15px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 15px;
-      transition: border-color 0.3s ease;
+      padding: 14px 18px;
+      margin-top: 14px;
+      border: 1.8px solid #ccc;
+      border-radius: 14px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-weight: 500;
+      background: #fafafa;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
     }
-    input[type="text"]:focus, input[type="number"]:focus {
+    input[type="text"]:focus, input[type="number"]:focus, input[type="file"]:focus {
       border-color: #e2136e;
+      box-shadow: 0 0 8px rgba(226, 19, 110, 0.4);
       outline: none;
+      background: #fff;
+    }
+    input::placeholder {
+      color: #999;
+      font-weight: 400;
     }
     button[type="submit"] {
       width: 100%;
-      margin-top: 20px;
-      padding: 14px;
+      margin-top: 26px;
+      padding: 16px;
       background-color: #e2136e;
       border: none;
-      border-radius: 12px;
+      border-radius: 30px;
       color: white;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, box-shadow 0.25s ease;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      box-shadow: 0 6px 18px rgba(226, 19, 110, 0.5);
     }
-    button[type="submit"]:hover {
+    button[type="submit"]:hover:not(:disabled) {
       background-color: #c40f60;
+      box-shadow: 0 8px 24px rgba(196, 15, 96, 0.7);
+    }
+    button[type="submit"]:disabled {
+      background-color: #b54a77;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.85;
     }
     .message {
-      margin-top: 12px;
-      font-size: 14px;
+      margin-top: 14px;
+      font-size: 15px;
+      min-height: 22px;
+      font-weight: 600;
+      user-select: none;
+      transition: color 0.3s ease;
     }
     .copy-success {
-      font-size: 12px;
-      color: green;
+      font-size: 13px;
+      color: #28a745;
+      margin-left: 6px;
+      user-select: none;
     }
     .footer {
       text-align: center;
-      margin-top: 25px;
-      font-size: 12px;
-      color: #777;
+      margin-top: 28px;
+      font-size: 13px;
+      color: #555;
+      user-select: none;
+    }
+
+    /* স্পিনারের জন্য ছোট এনিমেশন */
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    #loading-spinner {
+      display: none;
+      margin-left: 12px;
+      border: 3.5px solid #fff;
+      border-top: 3.5px solid #e2136e;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 25px;
+        max-width: 95%;
+      }
+      .instruction {
+        font-size: 14.5px;
+      }
+      input[type="text"], input[type="number"], input[type="file"] {
+        padding: 12px 14px;
+        font-size: 14.5px;
+      }
+      button[type="submit"] {
+        font-size: 16px;
+        padding: 14px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" role="main" aria-label="bKash Payment Instructions and Verification Form">
     <div class="logo-container">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYEpaAgVF6zOS_8KsJHGrDlKdEiDnHcwGf5LLkZnRm8OipKgd9zM2Nq0j&s=10" alt="BKASH" />
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYEpaAgVF6zOS_8KsJHGrDlKdEiDnHcwGf5LLkZnRm8OipKgd9zM2Nq0j&s=10" alt="BKASH লোগো" />
     </div>
 
     <div class="instruction">
-      📲 <strong>bKash দিয়ে শুভ ভাইকে টাকা পাঠানোর নির্দেশনা: </strong><br/><br/>
+      📲 <strong>bKash দিয়ে শুভ ভাইকে টাকা পাঠানোর নির্দেশনা:</strong><br/><br/>
       ১. <code>*247#</code> ডায়াল করুন বা bKash অ্যাপে যান<br/>
       ২. "Send Money" ক্লিক করুন<br/>
       ৩. প্রাপক নম্বর:
       <span class="copy-line">
         <span class="number" id="bkash-number">01778526313</span>
-        <button class="copy-btn" onclick="copyBkashNumber()">📋 কপি করুন</button>
-        <span id="copy-success" class="copy-success"></span>
+        <button class="copy-btn" onclick="copyBkashNumber()" aria-label="প্রাপক নম্বর কপি করুন">
+          📋 কপি
+        </button>
+        <span id="copy-success" class="copy-success" aria-live="polite"></span>
       </span><br/>
       ৪. পরিমাণ লিখুন এবং PIN দিয়ে সম্পন্ন করুন<br/>
       ৫. নিচে পরিমাণ, লাস্ট ৪ ডিজিট ও <strong>screenshot</strong> দিন
     </div>
 
-    <form id="form">
-      <input type="number" id="amount" placeholder="কত টাকা পাঠিয়েছেন?" />
-      <input type="text" id="transactionId" placeholder="লাস্ট ৪ ডিজিট বা টানজেকশন আইডি লিখুন" />
-      <input type="file" id="screenshotFile" accept="image/*" />
-      <button type="submit">✅ VERIFY</button>
-      <div id="error-message" class="message"></div>
+    <form id="form" aria-describedby="error-message">
+      <input type="number" id="amount" placeholder="কত টাকা পাঠিয়েছেন?" aria-label="পঠানো পরিমাণ" required />
+      <input type="text" id="transactionId" placeholder="লাস্ট ৪ ডিজিট বা টানজেকশন আইডি লিখুন" aria-label="ট্রানজেকশন আইডি" required />
+      <input type="file" id="screenshotFile" accept="image/*" aria-label="স্ক্রীনশট আপলোড করুন" required />
+      <button type="submit" id="submit-btn" aria-live="polite" aria-busy="false" aria-disabled="false">
+        ✅ VERIFY
+        <span id="loading-spinner" aria-hidden="true"></span>
+      </button>
+      <div id="error-message" class="message" role="alert" aria-live="assertive"></div>
     </form>
 
-    <div class="footer">© SHUVO BHAI Sand many — All Rights Reserved.</div>
+    <div class="footer" aria-label="কপিরাইট তথ্য">
+      © SHUVO BHAI Sand many — All Rights Reserved.
+    </div>
   </div>
 
   <script>
@@ -153,6 +260,8 @@
     const transactionInput = document.getElementById("transactionId");
     const screenshotInput = document.getElementById("screenshotFile");
     const errorMessage = document.getElementById("error-message");
+    const submitBtn = document.getElementById("submit-btn");
+    const loadingSpinner = document.getElementById("loading-spinner");
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -166,15 +275,20 @@
         return;
       }
 
-      // প্রথমে টেক্সট মেসেজ পাঠানো
+      // সাবমিটের সময় বাটন ডিএসেবল এবং স্পিনার দেখানো
+      submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-disabled', 'true');
+      submitBtn.setAttribute('aria-busy', 'true');
+      loadingSpinner.style.display = "inline-block";
+      errorMessage.textContent = "";
+
       const message = `🔔 নতুন bKash লেনদেন:\n💸 পরিমাণ: ${amount} টাকা\n🔢 লাস্ট ৪ ডিজিট: ${trxId}`;
       const textUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
       fetch(textUrl)
         .then((res) => {
           if (!res.ok) throw new Error("Text sending failed.");
-          
-          // এবার screenshot পাঠানো
+
           const formData = new FormData();
           formData.append("chat_id", chatId);
           formData.append("photo", file);
@@ -187,7 +301,7 @@
         .then((res) => {
           if (res.ok) {
             errorMessage.textContent = "✅ সফলভাবে জমা হয়েছে!";
-            errorMessage.style.color = "green";
+            errorMessage.style.color = "#28a745";
             amountInput.value = "";
             transactionInput.value = "";
             screenshotInput.value = "";
@@ -198,27 +312,46 @@
         .catch((err) => {
           console.error(err);
           errorMessage.textContent = "❌ কিছু ভুল হয়েছে, আবার চেষ্টা করুন।";
-          errorMessage.style.color = "red";
+          errorMessage.style.color = "#d32f2f";
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.setAttribute('aria-disabled', 'false');
+          submitBtn.setAttribute('aria-busy', 'false');
+          loadingSpinner.style.display = "none";
         });
     });
 
     function copyBkashNumber() {
       const number = document.getElementById("bkash-number").textContent;
-      const textarea = document.createElement("textarea");
-      textarea.value = number;
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand("copy");
-        const copyMsg = document.getElementById("copy-success");
-        copyMsg.textContent = "✔ কপি হয়েছে!";
-        setTimeout(() => {
-          copyMsg.textContent = "";
-        }, 2000);
-      } catch (err) {
-        document.getElementById("copy-success").textContent = "❌ কপি হয়নি!";
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(number).then(() => {
+          const copyMsg = document.getElementById("copy-success");
+          copyMsg.textContent = "✔ কপি হয়েছে!";
+          setTimeout(() => {
+            copyMsg.textContent = "";
+          }, 2000);
+        }).catch(() => {
+          document.getElementById("copy-success").textContent = "❌ কপি হয়নি!";
+        });
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = number;
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, 99999); // মোবাইলের জন্য
+        try {
+          document.execCommand("copy");
+          const copyMsg = document.getElementById("copy-success");
+          copyMsg.textContent = "✔ কপি হয়েছে!";
+          setTimeout(() => {
+            copyMsg.textContent = "";
+          }, 2000);
+        } catch (err) {
+          document.getElementById("copy-success").textContent = "❌ কপি হয়নি!";
+        }
+        document.body.removeChild(textarea);
       }
-      document.body.removeChild(textarea);
     }
   </script>
 </body>
