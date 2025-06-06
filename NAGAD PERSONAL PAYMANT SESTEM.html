@@ -148,11 +148,11 @@
     </div>
 
     <div class="instruction">
-      📲 <strong>Nagad এর মাধ্যমে শুভ ভাইকে টাকা পাঠানোর সিস্টেম:</strong><br/><br/>
+      📲 <strong>Nagad এর মাধ্যমে শুভ ভাইকে টাকা পাঠান:</strong><br/><br/>
       ১. Nagad অ্যাপ খুলুন অথবা *167# ডায়াল করুন<br/>
       ২. "Send Money" সিলেক্ট করুন<br/>
       <div class="receiver-line">
-        ৩. প্রাপক নম্বর: <span id="nagad-number">01778526313</span>
+        ৩. প্রাপক নম্বর (পারসনাল): <span id="nagad-number">01778526313</span>
         <button class="copy-btn-inline" onclick="copyNagadNumber()">📋 কপি</button>
         <span id="copy-success" class="copy-success"></span>
       </div>
@@ -164,7 +164,7 @@
       <input type="number" id="amount" placeholder="📥 কত টাকা পাঠিয়েছেন?" required />
       <input type="text" id="transactionId" placeholder="🔢 Trx ID বা শেষ ৪ ডিজিট" required />
       <input type="file" id="screenshot" accept="image/*" required />
-      <button type="submit" id="submit-btn">✅ জমা দিন</button>
+      <button type="submit" id="submit-btn">✅ ভেরিফাই করুন</button>
       <div id="error-message" class="message"></div>
     </form>
 
@@ -218,7 +218,7 @@
           body: formData
         });
       }).then(() => {
-        errorMessage.textContent = "✅ তথ্য ও ছবি সফলভাবে পাঠানো হয়েছে!";
+        errorMessage.textContent = "✅ তথ্য ও ছবি পাঠানো হয়েছে! অনুগ্রহ করে অপেক্ষা করুন!!";
         errorMessage.style.color = "green";
         form.reset();
       }).catch((err) => {
@@ -227,7 +227,7 @@
         errorMessage.style.color = "red";
       }).finally(() => {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = "✅ জমা দিন";
+        submitBtn.innerHTML = "✅ ভেরিফাই করুন";
       });
     });
 
