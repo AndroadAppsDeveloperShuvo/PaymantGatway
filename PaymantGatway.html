@@ -6,10 +6,7 @@
   <title>SHUVO SAND MANY TEWTORIYAL</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 0;
@@ -20,7 +17,6 @@
       align-items: center;
       height: 100vh;
     }
-
     .card {
       background: #fff;
       border-radius: 20px;
@@ -30,42 +26,35 @@
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
       animation: fadeIn 0.5s ease-in-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .logo-container {
       text-align: center;
       margin-bottom: 25px;
     }
-
     .logo-container img {
       width: 60px;
       height: auto;
     }
-
     .instruction {
       font-size: 15px;
       color: #333;
       line-height: 1.7;
       margin-bottom: 25px;
     }
-
     .copy-line {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       margin-top: 8px;
     }
-
     .number {
       color: green;
       font-weight: bold;
       font-size: 16px;
     }
-
     .copy-btn {
       background-color: #e2136e;
       color: white;
@@ -76,12 +65,10 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     .copy-btn:hover {
       background-color: #c40f60;
     }
-
-    input[type="text"], input[type="number"] {
+    input[type="text"], input[type="number"], input[type="file"] {
       width: 100%;
       padding: 12px 15px;
       margin-top: 10px;
@@ -90,12 +77,10 @@
       font-size: 15px;
       transition: border-color 0.3s ease;
     }
-
     input[type="text"]:focus, input[type="number"]:focus {
       border-color: #e2136e;
       outline: none;
     }
-
     button[type="submit"] {
       width: 100%;
       margin-top: 20px;
@@ -109,21 +94,17 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     button[type="submit"]:hover {
       background-color: #c40f60;
     }
-
     .message {
       margin-top: 12px;
       font-size: 14px;
     }
-
     .copy-success {
       font-size: 12px;
       color: green;
     }
-
     .footer {
       text-align: center;
       margin-top: 25px;
@@ -135,7 +116,7 @@
 <body>
   <div class="card">
     <div class="logo-container">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAYEpaAgVF6zOS_8KsJHGrDlKdEiDnHcwGf5LLkZnRm8OipKgd9zM2Nq0j&s=10" alt="BKASH" />
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLA08pwLYfYqzvsBwXaoHWEqxLZgHLmxyWn1X7JWHs1DwxrAH7EII1TBTh&s=10" alt="BKASH" />
     </div>
 
     <div class="instruction">
@@ -149,12 +130,13 @@
         <span id="copy-success" class="copy-success"></span>
       </span><br/>
       ৪. পরিমাণ লিখুন এবং PIN দিয়ে সম্পন্ন করুন<br/>
-      ৫. নিচে পাঠানো টাকার পরিমাণ এবং আপনার নাম্বারের শেষ ৪ ডিজিট দিন
+      ৫. নিচে পরিমাণ, লাস্ট ৪ ডিজিট ও <strong>screenshot</strong> দিন
     </div>
 
     <form id="form">
       <input type="number" id="amount" placeholder="কত টাকা পাঠিয়েছেন?" />
       <input type="text" id="transactionId" placeholder="লাস্ট ৪ ডিজিট বা টানজেকশন আইডি লিখুন" />
+      <input type="file" id="screenshotFile" accept="image/*" />
       <button type="submit">✅ VERIFY</button>
       <div id="error-message" class="message"></div>
     </form>
@@ -169,31 +151,48 @@
     const form = document.getElementById("form");
     const amountInput = document.getElementById("amount");
     const transactionInput = document.getElementById("transactionId");
+    const screenshotInput = document.getElementById("screenshotFile");
     const errorMessage = document.getElementById("error-message");
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       const amount = amountInput.value.trim();
       const trxId = transactionInput.value.trim();
+      const file = screenshotInput.files[0];
 
-      if (amount === "" || trxId === "") {
+      if (amount === "" || trxId === "" || !file) {
         errorMessage.textContent = "⚠️ অনুগ্রহ করে সব তথ্য পূরণ করুন।";
         errorMessage.style.color = "red";
         return;
       }
 
+      // প্রথমে টেক্সট মেসেজ পাঠানো
       const message = `🔔 নতুন bKash লেনদেন:\n💸 পরিমাণ: ${amount} টাকা\n🔢 লাস্ট ৪ ডিজিট: ${trxId}`;
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+      const textUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-      fetch(url)
+      fetch(textUrl)
+        .then((res) => {
+          if (!res.ok) throw new Error("Text sending failed.");
+          
+          // এবার screenshot পাঠানো
+          const formData = new FormData();
+          formData.append("chat_id", chatId);
+          formData.append("photo", file);
+
+          return fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+            method: "POST",
+            body: formData,
+          });
+        })
         .then((res) => {
           if (res.ok) {
             errorMessage.textContent = "✅ সফলভাবে জমা হয়েছে!";
             errorMessage.style.color = "green";
             amountInput.value = "";
             transactionInput.value = "";
+            screenshotInput.value = "";
           } else {
-            throw new Error("সার্ভার ত্রুটি!");
+            throw new Error("ছবি পাঠাতে সমস্যা হয়েছে।");
           }
         })
         .catch((err) => {
