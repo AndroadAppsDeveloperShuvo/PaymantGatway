@@ -220,10 +220,10 @@
     </div>
 
     <div class="instruction">
-      📲 <strong>bKash দিয়ে শুভ ভাইকে টাকা পাঠানোর নির্দেশনা:</strong><br/><br/>
+      📲 <strong>bKash দিয়ে শুভ ভাইকে টাকা পাঠান :</strong><br/><br/>
       ১. <code>*247#</code> ডায়াল করুন বা bKash অ্যাপে যান<br/>
       ২. "Send Money" ক্লিক করুন<br/>
-      ৩. প্রাপক নম্বর:
+      ৩. প্রাপক নম্বর(পারসনাল):
       <span class="copy-line">
         <span class="number" id="bkash-number">01778526313</span>
         <button class="copy-btn" onclick="copyBkashNumber()" aria-label="প্রাপক নম্বর কপি করুন">
@@ -247,7 +247,7 @@
     </form>
 
     <div class="footer" aria-label="কপিরাইট তথ্য">
-      © SHUVO BHAI Sand many — All Rights Reserved.
+      © SHUVO BHAI — SEND MONEY SYSTEM.
     </div>
   </div>
 
@@ -300,7 +300,7 @@
         })
         .then((res) => {
           if (res.ok) {
-            errorMessage.textContent = "✅ সফলভাবে জমা হয়েছে!";
+            errorMessage.textContent = "✅ তথ্য ও ছবি পাঠানো হয়েছে! অনুগ্রহ করে অপেক্ষা করুন!!";
             errorMessage.style.color = "#28a745";
             amountInput.value = "";
             transactionInput.value = "";
